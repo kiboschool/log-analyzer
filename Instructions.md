@@ -17,7 +17,7 @@ You will get a log file as an input, and you are asked to write a program to ana
 - Number of executed tests
 - Most used type of tests
 - Number of failures for each type
-- Create a table of `test type` vs `number of failuers`. Create a file of that table and with the name `typed_failures.log`.
+- Create a table of `test type` vs `number of failuers`.
 - Wrap the outputs of all previous steps into a final file called `stat_report.log`
 - BONUS: Find the number of tests that are related to temperature
 
