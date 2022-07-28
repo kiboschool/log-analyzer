@@ -1,7 +1,7 @@
 # Use Case
 
 A validation and testing engineer did a manual run for a series of new tests for the new feature that your start up is planning to include with the next release of the product.
-With each executed test, our engineer was proving a test result as follows:
+With each executed test, our engineer was providing a test result as follows:
 
 ```
 Test Type: <type> Result: <pass/fail> Description: <description> 
@@ -19,7 +19,11 @@ You will get a log file as an input, and you are asked to write a program to ana
 - Number of failures for each type
 - Create a table of `test type` vs `number of failuers`.
 - Wrap the outputs of all previous steps into a final file called `stat_report.log`
-- BONUS: Find the number of tests that are related to temperature
+- How many tests are related to component testing.
+- BONUS: Write a format checker function that makes sure that your file is ready for processing and supports the following cases:
+    - Empty Lines
+    - Empty Files
+    - Non Existent Files
 
 Note: Supported test types are:
 - Performance
@@ -40,6 +44,6 @@ Performance     5
 System          6
 Functional      8
 
-Number of tests related to temperature is: 17
+Tests that are related to components: 20
 ```
 
