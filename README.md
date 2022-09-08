@@ -21,7 +21,7 @@ Your program will take the path to a log file as input. It should analyze the fi
 - Number of executed tests
 - Most used type of test
 - Number of failures for each type
-- How many tests are related to component testing
+- How many tests are related to component testing (they contain the word 'component'
 - A table showing the number of failures for each type of test
 
 Wrap the outputs of all previous steps into a final file called `stat_report.log`
@@ -45,17 +45,17 @@ Performance     5
 System          6
 Functional      8
 
-Tests that are related to components: 20
+Tests that are related to "component": 20
 ```
 
 ## Bonus: File Format Checker
 
-Write a format checker function that makes sure that your file is ready for processing.
-
-It should print an error message if the file isn't ready for processing.
+Write a format checker function prepares your file for processing.
 
 Be sure to handle:
     - Empty Lines
     - Empty Files
     - Non Existent Files
     - Lines that are incorrectly formatted
+
+It should print an error message if the file isn't ready for processing.
