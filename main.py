@@ -1,26 +1,19 @@
 import os
+import sys
 report_filename = "stat_report.log"
-input_filename = "test_results.log"
 
-
-def count_tests(silent=False):
+def count_tests(filename):
     """
     This function counts the number of tests within the input log file
     """
-    with open(file="test_results.log", mode='r') as results:
+    with open(filename, mode='r') as results:
         count = len(results.readlines())
-        out_msg = f"Number of tests: {count}"
-
-        if silent:
-            print(out_msg)
-
         return count
 
 
 def failure_map(filename):
     """
-    This function build a table/map from failures based on type
-    :raises
+    This function builds a map of failures based on type
     """
     result_map = {
         "Performance": 0,
@@ -30,66 +23,59 @@ def failure_map(filename):
     with open(file=filename, mode='r') as results:
         for test_line in results:
             if "Performance" in test_line:
-                result_map["Performance"] = result_map["Performance"] + 1
+                result_map["Performance"] += 1
             elif "Functional" in test_line:
-                result_map["Functional"] = result_map["Functional"] + 1
+                result_map["Functional"] += 1
             else:
-                result_map["System"] = result_map["System"] + 1
+                result_map["System"] += 1
 
     return result_map
 
 
-def most_used_test_type(silent=False):
+def most_used_test_type(input_filename):
     """
     This function shows the most used type of tests
-    :raises
     """
     max_type = max(failure_map(input_filename), key=failure_map(input_filename).get)
-    out_msg = f"Most used type of tests: {max_type}"
-
-    if silent:
-        print(out_msg)
-
     return max_type
 
 
-def print_results(map):
+def format_results_table(results):
     """
-    A funcion to print a map dictionary
-    :raises
+    Format the result dictionary as a table
     """
-    print(f"Type            Count")
-    for test_type, count in map.items():
-        print(f"{test_type}         {count}")
+    table = [f"Type            Count"]
+    for test_type, count in results.items():
+        table.append(f"{test_type}         {count}")
+    return "\n".join(table)
 
-
-def print_dict_to_file(filename, data):
+def create_stat_report(input_filename):
     """
-    Prints a dict to a file
-    :raises
+    Format a report from all outputs
     """
-    with open(file=report_filename, mode='a') as report:
-        report.writelines(f"Type            Count\n")
-        for test_type, count in data.items():
-            report.writelines(f"{test_type}         {count}\n")
-
-
-def create_stat_report():
-    """
-    Create a report from all outputs we got
-    :return:
-    """
-    test_count = count_tests(silent=False)
-    most_used_type = most_used_test_type(silent=False)
-    failure_table = failure_map()
+    phrase = "component"
+    test_count = count_tests(input_filename)
+    most_used_type = most_used_test_type(input_filename)
+    failure_table = failure_map(input_filename)
+    phrase_count = filter_by_phrase(input_filename, phrase)
 
     test_count_msg = f"Number of tests: {test_count}"
     most_used_type_msg = f"Most used type of tests: {most_used_type}"
+    results_table = format_results_table(failure_table)
+    phrase_count_msg = f"Test items that are related to \"{phrase}\": {phrase_count}"
 
-    with open(file=report_filename, mode='w') as report:
-        report.writelines(test_count_msg + '\n' + most_used_type_msg + '\n')
-    print_dict_to_file(report_filename, failure_table)
+    return f"""{test_count_msg}
 
+{most_used_type_msg}
+
+{results_table}
+
+{phrase_count_msg}
+"""
+
+def write_stat_report(report):
+    with open(file=report_filename, mode='w') as dest:
+        dest.write(report)
 
 def format_checker(filename):
     data = ""
@@ -99,7 +85,6 @@ def format_checker(filename):
                 if line.strip() != "":
                     data = data + line
 
-        print(data)
         with open(file=filename, mode='w') as report:
             report.writelines(data)
     else:
@@ -113,16 +98,15 @@ def filter_by_phrase(filename, phrase):
             if phrase in test_line:
                 count += 1
 
-    print(f"Test items that are related to {phrase}: {count}")
     return count
 
 
 if __name__ == '__main__':
-    print(f"\n")
+    output_file = False
+    input_filename = sys.argv[1]
     format_checker(input_filename)
-    count_tests(silent=True)
-    most_used_test_type(silent=True)
-    print_results(failure_map(input_filename))
-    filter_by_phrase(input_filename, "component")
-    # create_stat_report()
-
+    report = create_stat_report(input_filename)
+    if output_file:
+        write_stat_report(report)
+    else:
+        print(report)
