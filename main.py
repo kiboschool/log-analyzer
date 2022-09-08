@@ -1,4 +1,3 @@
-
 import os
 report_filename = "stat_report.log"
 input_filename = "test_results.log"
