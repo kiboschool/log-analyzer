@@ -29,19 +29,34 @@ file for the following:
 - Number of failures for each type
 - How many tests are related to component testing (description contains 
   the word 'component')
+- The number of failures for each type of test.
 
-And generate a table showing the number of failures for each type of test.
+The starter code and tests expect the driving logic of the program to be in a
+function called `analyze_logs`. You should write helper functions to help you
+implement all of the different requirements.
 
-Write the output of all previous steps into a final file called `stat_report.log`
+## Starter Code
+
+The starter code in `log_analyzer.py` has an empty implementation for
+`analyze_log`. It also has some code to run the analyzer function when the
+program is run from the command line. When running the program, you can pass in
+an input file, and an optional output file to write the results.
+
+Examples:
+```
+python log_analyzer.py result_logs/test_results.log
+
+python log_analyzer.py result_logs/test_results_3.log statistics_output.txt
+```
 
 ## Expected Results
 
 The output for your program should look like this:
 
 ```
-Number of Executed Tests: 15
-
-Most used type of tests: performance
+Number of tests: 15
+Most used type of tests: Performance
+Tests related to "component": 10
 
 Failures:
 Type            Count
@@ -49,7 +64,6 @@ Performance     5
 System          6
 Functional      8
 
-Tests related "component": 10
 ```
 
 ## Testing
@@ -59,16 +73,3 @@ some of the files in the `result_logs/` folder to check that the output matches
 what you expect.
 
 Then, run the automated tests to confirm that your solution is correct.
-
-## Bonus: File Format Checker
-
-Write a format checker function prepares your file for processing.
-
-Be sure to handle:
-
-- Empty Lines
-- Empty Files
-- Non Existent Files
-- Lines that are incorrectly formatted
-
-It should print an error message if the file isn't ready for processing.
