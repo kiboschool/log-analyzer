@@ -1,4 +1,3 @@
-import os
 import sys
 
 def count_tests(log_lines):
@@ -43,6 +42,14 @@ def failure_map(log_lines):
 
 
 def format_failures(results):
+    """
+    Format the failure counts table
+
+    :param results: Dict mapping types to failure counts
+    :return: string formatted table of failures 
+    """
+    # You don't need to modify this function.
+
     table = [f"Type\t\tCount"]
     for test_type, count in results.items():
         table.append(f"{test_type}  \t{count}")
@@ -58,13 +65,16 @@ def count_phrase(log_lines, phrase):
 
 
 def analyze_logs(log):
+    # TODO: These values are currently hardcoded. You will need to change this
+    # by finding the actual values by analysing `log_lines` appropriately
     log_lines = log.splitlines()
     phrase = "component"
     test_count = count_tests(log_lines)
     most_used_type = most_used_test_type(log_lines)
     failure_table = failure_map(log_lines)
     phrase_count = count_phrase(log_lines, phrase)
-    
+    # /TODO ends. You should leave the next line as is
+
     return f"""Number of tests: {test_count}
 Most used type of test: {most_used_type}
 Tests related to \"{phrase}\": {phrase_count}
@@ -77,8 +87,8 @@ def write_stats(report, destination):
     """
     Write the report to a destination file
     """
-    with open(file=destination, mode='w') as dest:
-        dest.write(report)
+    with open(destination, 'w') as out_file:
+        out_file.write(report)
 
 
 if __name__ == '__main__':

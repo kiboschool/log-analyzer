@@ -17,7 +17,8 @@ After running the list of tests, the engineer noticed that running more tests
 will make it more challenging to provide a statistical report for the managers.
 
 Your task is to help generate an automatic report for test statistics, based on
-the log files.
+the log files. Another engineer had started writing out the program but was deployed
+to another project. You will need to write the rest of the code.
 
 ## Your Task
 
@@ -31,16 +32,21 @@ file for the following:
   the word 'component')
 - The number of failures for each type of test.
 
-The starter code and tests expect the driving logic of the program to be in a
-function called `analyze_logs`. You should write helper functions to help you
-implement all of the different requirements.
+The starter code structures the program such that the core function is a function called 
+`analyze_logs`. This function takes the contents of a test log file (a string) as
+input and returns a string with the analysis. Your task is to implement the functionality
+required for finding the various metrics listed above.
+
+Finally, your program should write the test results to an output file if an output file is
+specified or if no output file is specified, results should be printed to the screen.
 
 ## Starter Code
 
-The starter code in `log_analyzer.py` has an empty implementation for
-`analyze_log`. It also has some code to run the analyzer function when the
-program is run from the command line. When running the program, you can pass in
-an input file, and an optional output file to write the results.
+Starter code is provided in `log_analyzer.py`. It has code to read a file and run the 
+analysis when the program is run from the command line. When running the program, you 
+can pass in an input file, and an optional output file to write the results to.
+However, a lot of this functionality returns hardcoded numbers as it is not yet 
+implemented.
 
 Examples:
 ```
@@ -63,7 +69,6 @@ Type            Count
 Performance     5
 System          6
 Functional      8
-
 ```
 
 ## Testing

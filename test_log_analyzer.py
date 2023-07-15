@@ -62,6 +62,11 @@ class TestLogAnalyzer(unittest.TestCase):
         # Check that solution runs without raising any exceptions
         result = analyze_logs(LOGS)
 
+    def test_write_to_stdout(self):
+        pass
+
+    def test_write_to_file(self):
+        pass
 
 
 if __name__ == "__main__":
