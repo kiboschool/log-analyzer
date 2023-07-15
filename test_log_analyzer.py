@@ -1,15 +1,34 @@
+import os.path
 import unittest
+import subprocess
 from log_analyzer import analyze_logs
 
 from gradescope_utils.autograder_utils.decorators import weight
 
-with open("result_logs/test_results.log") as f:
+class LogAnalyzerError(Exception):
+    pass
+
+SHORT_LOGFILE = "result_logs/test_results.log"
+LONG_LOGFILE = "result_logs/test_results_5.log"
+
+with open(SHORT_LOGFILE) as f:
     LOGS = f.read()
 
-with open("result_logs/test_results_5.log") as f:
+with open(LONG_LOGFILE) as f:
     LONG_LOGS = f.read()
 
 class TestLogAnalyzer(unittest.TestCase):
+
+    def _run_log_analyzer(self, infile, outfile=''):
+        cmd = ['python3', 'log_analyzer.py', infile]
+        if outfile:
+            cmd.append(outfile)
+        res = subprocess.run(cmd, stdout=subprocess.PIPE)
+        if res.returncode:
+            raise LogAnalyzerError('Error while running command: `%s`' % ' '.join(cmd))
+
+        return res
+
     @weight(3)
     def test_count(self):
         result = analyze_logs(LOGS)
@@ -60,13 +79,25 @@ class TestLogAnalyzer(unittest.TestCase):
     @weight(2)
     def test_student_submitted_a_running_solution(self):
         # Check that solution runs without raising any exceptions
-        result = analyze_logs(LOGS)
+        res = self._run_log_analyzer(SHORT_LOGFILE)
+        self.assertEqual(res.returncode, 0, msg="Program exited with errors")
 
+    @weight(2)
     def test_write_to_stdout(self):
-        pass
+        res = self._run_log_analyzer(SHORT_LOGFILE)
+        prog_output = str(res.stdout)
+        for expected_phrase in ('number of tests', 'most used type of test', 'related to'):
+            self.assertTrue(expected_phrase in prog_output.lower())
 
+    @weight(3)
     def test_write_to_file(self):
-        pass
+        outfile = os.path.expanduser('~/log_analyzer_test_file')
+        res = self._run_log_analyzer(SHORT_LOGFILE, outfile=outfile)
+        with open(outfile, 'r') as f:
+            prog_output = f.read()
+        for expected_phrase in ('number of tests', 'most used type of test', 'related to'):
+            self.assertTrue(expected_phrase in prog_output.lower())
+        os.remove(outfile)
 
 
 if __name__ == "__main__":
